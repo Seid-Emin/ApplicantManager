@@ -21,8 +21,8 @@ class App extends Component {
     },
     submited: false,
     showBackdrop: false,
-    addedStudentId: '',
-    editMode: false
+    editMode: false,
+    submitedApplicantId: null
   });
 
   //Store form input values in state
@@ -41,27 +41,20 @@ class App extends Component {
   // };
 
   //Get form data stored in the state and pass it to server
-  // submitHandler = (e) => {
-  //   e.preventDefault();
-  //   const data = this.state.applicant;
-  //   axios.post('/applicants.json', data)
-  //     .then(response => {
-  //       let id = response.data.name;
-
-  //       this.setState({
-  //         addedStudentId: id,
-  //         submited: true
-  //       });
-  //     })
-  //     .catch(error => console.log(error));
-  // }
+  submitHandler = (submitApplicant) => {
+    axios.post('/applicants.json', submitApplicant)
+      .then(response => {
+        this.setState({ submited: true, submitedApplicantId: response.data.name });
+      })
+      .catch(error => console.log(error));
+  }
 
   shouldComponentUpdate(nextProps, nextState) {
     if (this.state.submited === nextState.submited) {
-      //console.log('App shouldCompUpdate false');
+      console.log('App shouldCompUpdate false');
       return false;
     } else {
-      //console.log('App shouldCompUpdate true');
+      console.log('App shouldCompUpdate true');
       //console.log(nextState);
       this.setState({ submited: false })
       return true;
@@ -73,12 +66,10 @@ class App extends Component {
       <React.Fragment>
         <h1 className="Title">Application Manager</h1>
         <div className="MainWrapper">
-          <Form />
+          <Form submit={this.submitHandler} />
           <ApplicantCards
-          // submited={this.state.submited}
-          // addedApplicantId={this.state.addedStudentId}
-          // inputChange={this.nameHandler.bind(this)}
-          // checkChange={this.checkChangeHandler}
+            submited={this.state.submited}
+            submitedApplicantId={this.state.submitedApplicantId}
           />
 
         </div>

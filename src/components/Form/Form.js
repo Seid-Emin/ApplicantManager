@@ -1,8 +1,5 @@
 import React, { Component } from 'react';
 
-import axios from '../../axios';
-import Backdrop from '../IU/Backdrop/Backdrop';
-
 import './Form.css';
 
 
@@ -24,11 +21,11 @@ class Form extends Component {
                 studyFromHome: props.studyFromHome || false,
                 id: props.id,
             },
-            submited: false,
             cancel: props.cancel,
             editMode: props.show,
             save: props.save,
         };
+        this.submit = this.submit.bind(this);
         this.inputHandler = this.inputHandler.bind(this);
         this.saveEditedApplicantHandler = this.saveEditedApplicantHandler.bind(this);
     }
@@ -47,77 +44,90 @@ class Form extends Component {
         this.setState({ applicant: updatedApplicant });
     };
 
-    //Get form data stored in the state and pass it to server
-    // submitHandler = (e) => {
-    //     e.preventDefault();
-    //     const data = this.state.applicant;
-    //     axios.post('/applicants.json', data)
-    //         .then(response => {
-    //             console.log(response);
-
-    //             this.setState({ submited: true });
-    //         })
-    //         .catch(error => console.log(error));
-    // }
-
-    submitApplicant = (e) => {
+    submit = (e) => {
         e.preventDefault();
-        this.props.submit(this.state.applicant);
+        this.props.submit(this.state.applicant)
     }
 
     saveEditedApplicantHandler = (e) => {
         e.preventDefault();
         let appState = this.state.applicant;
-        console.log(appState.id);
-
         this.props.save(appState)
     }
-
-
-    // saveEditedApplicantHandler = (editedApplicant) => {
-    //     const updatedApplicants = [...this.state.applicants];
-    //     const indexOfEditeApplicant = updatedApplicants.findIndex(applicant => {
-    //         return applicant.id === editedApplicant.id
-    //     });
-    //     updatedApplicants[indexOfEditeApplicant] = editedApplicant;
-    //     this.setState({
-    //         applicants: updatedApplicants,
-    //         editedApplicant: true
-    //     })
-    // }
 
     render() {
         let formClasses = this.state.editMode ? 'MainForm FormForEdit' : 'MainForm';
         let cancelBtn = this.state.editMode ? <input type="submit" className="CancelBtn" value='Cancel' onClick={this.cancel} /> : null;
         return (
             <React.Fragment>
-                <form className={formClasses} onSubmit={this.state.editMode ? this.saveEditedApplicantHandler : this.submitApplicant}>
+                <form className={formClasses} onSubmit={this.state.editMode ? this.saveEditedApplicantHandler : this.submit}>
                     <fieldset>
                         <legend className='Student'>Add Student</legend>
                         <label>Name *:</label><br />
-                        <input onChange={this.inputHandler} type="text" name="name" placeholder="Enter student name..." value={this.state.applicant.name} />
+                        <input
+                            onChange={this.inputHandler}
+                            type="text"
+                            name="name"
+                            placeholder="Enter student name..."
+                            value={this.state.applicant.name} />
                         <br />
                         <label>Email *:</label><br />
-                        <input onChange={this.inputHandler} type="email" name="email" placeholder="Enter e-mail..." value={this.state.applicant.email} />
+                        <input
+                            onChange={this.inputHandler}
+                            type="email"
+                            name="email"
+                            placeholder="Enter e-mail..."
+                            value={this.state.applicant.email} />
                         <br />
                         <label>Age *:</label><br />
-                        <input onChange={this.inputHandler} type="number" name="age" placeholder="Enter student age..." value={this.state.applicant.age} />
+                        <input
+                            onChange={this.inputHandler}
+                            type="number"
+                            name="age"
+                            placeholder="Enter student age..."
+                            value={this.state.applicant.age} />
                         <br />
                         <label>Phone Number *:</label><br />
-                        <input onChange={this.inputHandler} className="PhoneNumber" type="number" name="phoneNum" placeholder="Enter Phone 08..." value={this.state.applicant.phoneNum} />
+                        <input
+                            onChange={this.inputHandler}
+                            className="PhoneNumber"
+                            type="number"
+                            name="phoneNum"
+                            placeholder="Enter Phone 08..."
+                            value={this.state.applicant.phoneNum} />
 
                         <p className="PrefCom">Preferred Way of Communication *</p>
                         <div className="EmailRadio">
-                            <label><input onChange={this.inputHandler} type="radio" name="prefWayOfComm" value="Email" className="Email" checked={this.state.applicant.prefWayOfComm === 'Email'} />E-mail</label>
+                            <label>
+                                <input
+                                    onChange={this.inputHandler}
+                                    type="radio"
+                                    name="prefWayOfComm"
+                                    value="Email"
+                                    className="Email"
+                                    checked={this.state.applicant.prefWayOfComm === 'Email'} />E-mail
+                                 </label>
                         </div>
                         <div className="PhoneRadio">
-                            <label><input onChange={this.inputHandler} type="radio" name="prefWayOfComm" value="Phone" className="Phone" checked={this.state.applicant.prefWayOfComm === 'Phone'} />Phone</label>
+                            <label>
+                                <input
+                                    onChange={this.inputHandler}
+                                    type="radio"
+                                    name="prefWayOfComm"
+                                    value="Phone"
+                                    className="Phone"
+                                    checked={this.state.applicant.prefWayOfComm === 'Phone'} />Phone
+                                   </label>
                         </div>
 
 
                         <label className="EnglLevelLabel">English Level *</label>
                         <br />
-                        <select onChange={this.inputHandler} name='englLevel' className="EnglLevel" defaultValue={this.state.applicant.englLevel || 'not set'}>
+                        <select
+                            onChange={this.inputHandler}
+                            name='englLevel'
+                            className="EnglLevel"
+                            defaultValue={this.state.applicant.englLevel || 'not set'}>
                             <option value="">-- None --</option>
                             <option name='A1' value="A1">A1</option>
                             <option name='A2' value="A2">A2</option>
@@ -129,26 +139,52 @@ class Form extends Component {
                         <br />
                         <label name='availableToStart' className="DateAvailable">Available to Start *:</label>
                         <br />
-                        <input onChange={this.inputHandler} type="date" className="Date" name="date" value={this.state.applicant.availableToStart} />
+                        <input
+                            onChange={this.inputHandler}
+                            type="date" className="Date"
+                            name="availableToStart"
+                            defaultValue={this.state.applicant.availableToStart} />
                         <br />
                         <label>Technical Skills and Courses <span className="Opt">(optional)</span>:</label>
                         <br />
-                        <textarea onChange={this.inputHandler} name="techSkills" className="TechSkills" rows="2" cols="40"
-                            placeholder="Enter info..." value={this.state.applicant.techSkills}>
+                        <textarea
+                            onChange={this.inputHandler}
+                            name="techSkills"
+                            className="TechSkills"
+                            rows="2" cols="40"
+                            placeholder="Enter info..."
+                            value={this.state.applicant.techSkills}>
                         </textarea>
                         <br /><br />
-                        <label>Short Personal Presentation <span className="Opt">(optional)</span>:</label>
+                        <label>Short Personal Presentation
+                            <span className="Opt">(optional)</span>
+                            :</label>
                         <br />
-                        <textarea onChange={this.inputHandler} name="shortPres" className="ShortPresentation" rows="2" cols="40"
-                            placeholder="Reason for joining the program..." value={this.state.applicant.shortPres}>
+                        <textarea
+                            onChange={this.inputHandler}
+                            name="shortPres"
+                            className="ShortPresentation"
+                            rows="2"
+                            cols="40"
+                            placeholder="Reason for joining the program..."
+                            value={this.state.applicant.shortPres}>
                         </textarea>
                         <br />
-                        <label className="StudyFromHomeLabel"> <input onChange={this.checkChangeHandler} type="checkbox" name="studyFromHome" value="Study from home" checked={this.state.applicant.studyFromHome} />Study from home <span className="Opt">
-                            (optional)</span>
+                        <label className="StudyFromHomeLabel">
+                            <input
+                                onChange={this.checkChangeHandler}
+                                type="checkbox"
+                                name="studyFromHome"
+                                value="Study from home"
+                                checked={this.state.applicant.studyFromHome} />Study from home
+                              <span className="Opt">
+                                (optional)</span>
                         </label>
                         <br />
-
-                        <input type="submit" className="SubmitBtn" value={this.state.show ? 'Save' : "Submit"} />
+                        <input
+                            type="submit"
+                            className="SubmitBtn"
+                            value={this.state.show ? 'Save' : "Submit"} />
                         {cancelBtn}
                         <p className="RequiredFields">* - fields requred</p>
                     </fieldset>

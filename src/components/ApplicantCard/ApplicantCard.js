@@ -22,19 +22,65 @@ class ApplicantCard extends Component {
                 studyFromHome: props.studyFromHome,
                 id: props.id,
             },
-            editedApplicant: props.editedApplicant,
+            editedApplicant: false,
             delete: props.delete,
             editMode: false,
-            save: props.onApplicantSave,
         };
+        this.deleteApplicant = this.deleteApplicant.bind(this);
         this.saveEditedApplicantHandler = this.saveEditedApplicantHandler.bind(this);
     }
 
-    saveEditedApplicantHandler = (e) => {
-        e.preventDefault();
-        let appState = this.state.applicant
-        this.props.onApplicantSave(appState)
+    shouldComponentUpdate(nextProps, nextState) {
+        if (this.state.editMode === nextState.editMode) {
+            console.log('card shouldComponentUpdate from false');
+            return false;
+        } else {
+            console.log('card shouldComponentUpdate from true');
+            return true;
+        }
+    }
 
+    componentDidUpdate() {
+        if (this.props.submited) {
+            // console.log('ApplicantCards ComponentDidUpdate');
+            axios.put('/applicants/' + this.props.submitedApplicantId + '.json')
+                .then(res => {
+                    // const fetchedApplicants = [...this.state.applicant];
+                    // // console.log(res);
+
+                    // fetchedApplicants.push({
+                    //     ...res.data,
+                    //     id: this.props.submitedApplicantId
+                    // });
+                    // this.setState({
+                    //     applicant: fetchedApplicants,
+                    // });
+                })
+                .catch(error => { console.log('something went wrong on componentDidUpdate') }
+                );
+        }
+    }
+
+    // saveEditedApplicantHandler = (e) => {
+    //     e.preventDefault();
+    //     let appState = this.state.applicant
+    //     this.props.onApplicantSave(appState)
+
+    // }
+    saveEditedApplicantHandler = (editedApplicant) => {
+        axios.put('/applicants/' + editedApplicant.id + '.json', editedApplicant)
+            .then(res => {
+                console.log(res);
+                console.log(editedApplicant.id);
+
+            })
+            .catch(error => { console.log('something went wrong on componentDidUpdate') }
+            );
+        this.setState({
+            applicant: editedApplicant,
+            editedApplicant: true,
+            editMode: false
+        })
     }
 
     deleteApplicant = () => {
@@ -53,19 +99,6 @@ class ApplicantCard extends Component {
         this.setState({ editMode: false })
     }
 
-    shouldComponentUpdate(nextProps, nextState) {
-        if (this.state.editedApplicant !== nextState.editedApplicant && this.props.id === nextProps.id && this.props.editMode === nextState.editMode) {
-            console.log('card shouldComponentUpdate from false');
-            return false;
-        } else {
-            console.log('card shouldComponentUpdate from true');
-            return true;
-        }
-    }
-
-    // componentDidUpdate() {
-    //     this.setState(applicant);
-    // }
     render() {
         let thisStateApplicant = this.state.applicant
         let editModeForm = this.state.editMode ?
@@ -82,10 +115,8 @@ class ApplicantCard extends Component {
                 studyFromHome={thisStateApplicant.studyFromHome}
                 id={thisStateApplicant.id}
                 show={this.state.editMode}
-                save={this.state.save}
+                save={this.saveEditedApplicantHandler}
                 cancel={this.cancelEditHandler}
-
-                submit={this.props.submit}
             />
             : null
         return (
@@ -139,7 +170,7 @@ class ApplicantCard extends Component {
                             </tr>
                         </tbody>
                     </table>
-                    <button className="DeleteBtn" onClick={() => this.state.applicant.delete(this.state.applicant.id)}>x</button>
+                    <button className="DeleteBtn" onClick={this.deleteApplicant}>x</button>
                     <button className="EditBtn" onClick={this.editApplicantHandler}>Edit</button>
                 </div>
             </React.Fragment >

@@ -9,7 +9,6 @@ class ApplicantCards extends Component {
     state = {
         applicants: [],
         clickedApplicantDeleteBtn: null,
-        addedApplicantId: null,
         loadedApplicants: [],
         editMode: false,
         applicant: null,
@@ -34,26 +33,23 @@ class ApplicantCards extends Component {
     };
 
     componentDidUpdate() {
-        if (this.props.addedApplicantId) {
+        if (this.props.submited) {
             // console.log('ApplicantCards ComponentDidUpdate');
-            if (!this.state.addedApplicantId || (this.state.addedApplicantId && this.state.addedApplicantId.id !== this.props.addedApplicantId)) {
-                axios.get('/applicants/' + this.props.addedApplicantId + '.json')
-                    .then(res => {
-                        if (this.props.addedApplicantId !== this.state.addedApplicantId) {
-                            const fetchedApplicants = [...this.state.applicants];
-                            fetchedApplicants.push({
-                                ...res.data,
-                                id: this.props.addedApplicantId
-                            });
-                            this.setState({
-                                applicants: fetchedApplicants, addedApplicantId: this.props.addedApplicantId,
-                                deletedApplicant: false
-                            });
-                        }
-                    })
-                    .catch(error => { console.log('something went wrong on componentDidUpdate') }
-                    );
-            }
+            axios.get('/applicants/' + this.props.submitedApplicantId + '.json')
+                .then(res => {
+                    const fetchedApplicants = [...this.state.applicants];
+                    console.log(res);
+
+                    fetchedApplicants.push({
+                        ...res.data,
+                        id: this.props.submitedApplicantId
+                    });
+                    this.setState({
+                        applicants: fetchedApplicants,
+                    });
+                })
+                .catch(error => { console.log('something went wrong on componentDidUpdate') }
+                );
         }
     }
 
@@ -82,45 +78,33 @@ class ApplicantCards extends Component {
 
     // }
 
-    //Get form data stored in the state and pass it to server
-    submitHandler = (submitedApplicant) => {
-        //const data = this.state.applicant;
-        axios.post('/applicants.json', submitedApplicant)
-            .then(response => {
-                this.setState({ submited: true });
-            })
-            .catch(error => console.log(error));
-    }
 
     deleteApplicantHandler = (id) => {
         axios.delete('/applicants/' + id + '.json')
             .then(res => {
-                this.setState({ deletedApplicant: true });
                 const appArr = this.state.applicants
                 const appIndex = appArr.findIndex(applicant => {
                     return applicant.id === id
                 })
                 appArr.splice(appIndex, 1);
-                this.setState({ applicants: appArr });
+                this.setState({ applicants: appArr, deletedApplicant: true });
             })
             .catch(error => {
                 console.log('somethink went wrong on deleting');
             })
     }
 
-
-
-    saveEditedApplicantHandler = (editedApplicant) => {
-        const updatedApplicants = [...this.state.applicants];
-        const indexOfEditeApplicant = updatedApplicants.findIndex(applicant => {
-            return applicant.id === editedApplicant.id
-        });
-        updatedApplicants[indexOfEditeApplicant] = editedApplicant;
-        this.setState({
-            applicants: updatedApplicants,
-            editedApplicant: true
-        })
-    }
+    // saveEditedApplicantHandler = (editedApplicant) => {
+    //     const updatedApplicants = [...this.state.applicants];
+    //     const indexOfEditeApplicant = updatedApplicants.findIndex(applicant => {
+    //         return applicant.id === editedApplicant.id
+    //     });
+    //     updatedApplicants[indexOfEditeApplicant] = editedApplicant;
+    //     this.setState({
+    //         applicants: updatedApplicants,
+    //         editedApplicant: true
+    //     })
+    // }
 
 
 
@@ -137,17 +121,12 @@ class ApplicantCards extends Component {
                     phoneNum={applicant.phoneNum}
                     prefWayOfComm={applicant.prefWayOfComm}
                     englLevel={applicant.englLevel}
-                    availableToStart={applicant.date}
+                    availableToStart={applicant.availableToStart}
                     techSkills={applicant.techSkills}
                     shortPres={applicant.shortPres}
                     studyFromHome={applicant.studyFromHome}
-                    delete={() => this.deleteApplicantHandler(applicant.id)
-                    }
+                    delete={this.deleteApplicantHandler}
                     clicked={() => this.clickedApplicant(applicant.id)}
-                    onApplicantSave={this.saveEditedApplicantHandler}
-                    editedApplicant={this.state.editedApplicant}
-
-                    submit={this.submitHandler}
                 />
             )) : null;
 
