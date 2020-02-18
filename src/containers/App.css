@@ -1,0 +1,13 @@
+.Title {
+  text-align: center;
+  margin: 2px;
+}
+
+.MainWrapper {
+  margin: 30px 15px;
+  width: 100%;
+  display: flex;
+  padding-top: 20px;
+  justify-content: space-between;
+  position: relative;
+}

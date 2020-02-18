@@ -1,0 +1,109 @@
+/* ----- Students Card ----- */
+table {
+    width: 100%;
+}
+
+td {
+    width: 50%;
+    padding: 3px;
+}
+
+tr:nth-child(even) {
+    background: #CCC;
+}
+
+tr:nth-child(odd) {
+    background: #FFF;
+
+}
+
+.StudentInfoOutput {
+    z-index: 5;
+    width: inherit;
+    padding: 0 20px 20px;
+
+}
+
+.Info-content-wrapper {
+    width: 100%;
+    height: 100%;
+}
+
+.CardWr {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.CardsWrap {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    position: relative;
+}
+
+.StudentCart {
+    width: 30.5%;
+    max-height: 700px;
+    margin: .7vw;
+    padding: 15px;
+    font-size: 14px;
+    font-weight: 300;
+    border: 1px solid grey;
+    background-color: rgb(235, 235, 235);
+    position: relative;
+}
+
+@media only screen and (max-width: 1550px) {
+    .StudentCart {
+        width: 45%;
+    }
+
+}
+
+@media only screen and (max-width: 1200px) {
+    .StudentInfoOutput {
+        flex-direction: column;
+    }
+
+    .StudentCart {
+        width: 80%;
+    }
+
+}
+
+
+.EditBtn,
+.DeleteBtn,
+.CloseBtn {
+    position: absolute;
+    right: 2px;
+}
+
+.DeleteBtn,
+.CloseBtn {
+    top: 2px;
+    background-color: rgb(228, 53, 53);
+    color: #fafafa;
+    border-radius: 50%;
+    box-decoration-break: none;
+    border: 1px solid grey;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+.DeleteBtn:hover {
+    background-color: rgb(241, 106, 106);
+}
+
+.EditBtn {
+    bottom: 2px;
+    background-color: skyblue;
+    border: none;
+    height: 20px;
+    cursor: pointer;
+}
+
+.EditBtn:hover {
+    background-color: rgb(78, 192, 236);
+}

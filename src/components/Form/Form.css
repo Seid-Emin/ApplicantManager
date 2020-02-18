@@ -1,0 +1,120 @@
+/* ---- Form css ---- */
+.MainForm {
+    justify-content: left;
+    position: sticky;
+    position: relative;
+    margin-right: 15px;
+}
+
+.student {
+    text-align: center;
+    margin: 0 35x;
+}
+
+.MainWrapper {
+    margin: 30px 15px;
+    width: 100%;
+    display: flex;
+    padding-top: 20px;
+    justify-content: space-between;
+    position: relative;
+}
+
+.MainForm {
+    justify-content: left;
+    position: sticky;
+    position: relative;
+}
+
+.FormForEdit {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 6;
+    background-color: white;
+    padding: 8px;
+}
+
+.WrapperdInner {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+}
+
+fieldset {
+    padding: 15px;
+}
+
+input {
+    margin-top: 5px;
+    margin-bottom: 15px;
+}
+
+label {
+    font-size: 18x;
+}
+
+.EmailRadio,
+.PhoneRadio {
+    padding: 5px;
+}
+
+.PhoneRadio {
+    margin-bottom: 10px;
+}
+
+input[type='radio'] {
+    margin: 0;
+}
+
+select {
+    margin-bottom: 15px;
+}
+
+.RequiredFields {
+    color: rgb(253, 55, 55);
+    font-size: 10px;
+}
+
+.Student-info-title {
+    padding-right: 10px;
+}
+
+.Opt {
+    font-size: 10px;
+}
+
+.SubmitBtn {
+    border: 2px solid #4CAF50;
+}
+
+.CancelBtn {
+    border: 2px solid rgb(110, 230, 200);
+    margin-left: 5px;
+}
+
+.SubmitBtn,
+.CancelBtn {
+    width: 80px;
+    padding: 5px 10px;
+    background-color: white;
+    color: black;
+    cursor: pointer;
+}
+
+.SubmitBtn:hover,
+.CancelBtn:hover {
+    background-color: rgb(227, 236, 229);
+}
+
+@media only screen and (max-width: 900px) {
+    .FormForEdit {
+        left: 25%;
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    .FormForEdit {
+        left: 10%;
+    }
+}

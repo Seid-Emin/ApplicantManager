@@ -1,0 +1,22 @@
+.StudentInfoOutput {
+    z-index: 5;
+    width: inherit;
+    padding: 0 20px 20px;
+
+}
+
+.Info-content-wrapper {
+    width: 100%;
+    height: 100%;
+}
+
+.CardWr {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.CardsWrap {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+}
