@@ -39,8 +39,6 @@ class ApplicantCards extends Component {
             axios.get('/applicants/' + this.props.submitedApplicantId + '.json')
                 .then(res => {
                     const fetchedApplicants = [...this.state.applicants];
-                    console.log(res);
-
                     fetchedApplicants.push({
                         ...res.data,
                         id: this.props.submitedApplicantId
@@ -55,7 +53,6 @@ class ApplicantCards extends Component {
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        console.log(this.state.applicant);
         if (this.props.submited === nextProps
             && this.state.deletedApplicant === nextState.deletedApplicant
             && this.state.editedApplicant === nextState.editedApplicant) {
@@ -87,6 +84,7 @@ class ApplicantCards extends Component {
             this.state.applicants.map(applicant => (
                 <ApplicantCard
                     key={applicant.id}
+                    currentApplicant={applicant}
                     id={applicant.id}
                     name={applicant.name}
                     email={applicant.email}

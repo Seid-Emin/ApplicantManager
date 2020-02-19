@@ -58,12 +58,11 @@ class Form extends Component {
 
     render() {
         let formClasses = this.state.editMode ? 'MainForm FormForEdit' : 'MainForm';
-        let cancelBtn = this.state.editMode ? <input type="submit" className="CancelBtn" value='Cancel' onClick={this.cancel} /> : null;
-        return (
+        let cancelBtn = this.state.editMode ? <input type="submit" className="CancelBtn" value='Cancel' onClick={this.cancel} /> : null; return (
             <React.Fragment>
                 <form className={formClasses} onSubmit={this.state.editMode ? this.saveEditedApplicantHandler : this.submit}>
                     <fieldset>
-                        <legend className='Student'>Add Student</legend>
+                        <legend className='Student'>{this.state.editMode ? 'Edit Student Info' : 'Add Student'}</legend>
                         <label>Name *:</label><br />
                         <input
                             onChange={this.inputHandler}
@@ -196,7 +195,7 @@ class Form extends Component {
 }
 
 Form.propTypes = {
-    cancel: PropTypes.bool,
+    cancel: PropTypes.func,
     editMode: PropTypes.bool,
     save: PropTypes.func,
     applicant: PropTypes.exact({

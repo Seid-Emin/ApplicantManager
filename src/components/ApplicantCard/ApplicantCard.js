@@ -11,19 +11,7 @@ class ApplicantCard extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            applicant: {
-                name: props.name,
-                email: props.email,
-                age: props.age,
-                phoneNum: props.phoneNum,
-                prefWayOfComm: props.prefWayOfComm,
-                englLevel: props.englLevel,
-                availableToStart: props.availableToStart,
-                techSkills: props.techSkills,
-                shortPres: props.shortPres,
-                studyFromHome: props.studyFromHome,
-                id: props.id,
-            },
+            applicant: props.currentApplicant,
             editedApplicant: false,
             delete: props.delete,
             editMode: false,
@@ -33,7 +21,8 @@ class ApplicantCard extends Component {
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        if (this.state.editMode === nextState.editMode) {
+        if (this.state.editMode === nextState.editMode
+            && this.state.editedApplicant === nextState.editedApplicant) {
             console.log('card shouldComponentUpdate from false');
             return false;
         } else {
@@ -55,9 +44,6 @@ class ApplicantCard extends Component {
     saveEditedApplicantHandler = (editedApplicant) => {
         axios.put('/applicants/' + editedApplicant.id + '.json', editedApplicant)
             .then(res => {
-                console.log(res);
-                console.log(editedApplicant.id);
-
             })
             .catch(error => { console.log('something went wrong on componentDidUpdate') }
             );

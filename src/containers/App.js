@@ -7,18 +7,6 @@ import ApplicantCards from './ApplicantCards/ApplicantCards';
 
 class App extends Component {
   state = ({
-    applicant: {
-      name: '',
-      email: '',
-      age: '',
-      phoneNum: '',
-      prefWayOfComm: '',
-      englLevel: '',
-      availableToStart: '',
-      techSkills: '',
-      shortPres: '',
-      studyFromHome: false
-    },
     submited: false,
     submitedApplicantId: null
   });
