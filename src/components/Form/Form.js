@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 
 import './Form.css';
 
+import { checkValidity, updateObject } from '../../shared/utility';
+
 
 
 class Form extends Component {
@@ -10,10 +12,46 @@ class Form extends Component {
         super(props);
         this.state = {
             applicant: {
-                name: props.name || '',
-                email: props.email || '',
-                age: props.age || '',
-                phoneNum: props.phoneNum || '',
+                name: {
+                    value: props.name || '',
+                    validation: {
+                        required: true,
+                        isName: true
+                    },
+                    valid: false,
+                    touched: false,
+                },
+                email: {
+                    value: props.email || '',
+                    validation: {
+                        required: true,
+                        isEmail: true
+                    },
+                    valid: false,
+                    touched: false,
+                },
+                age: {
+                    value: props.age || '',
+                    validation: {
+                        required: true,
+                        isNumeric: true,
+                        biggerThan: '18',
+                        lessThan: '100'
+                    },
+                    valid: false,
+                    touched: false,
+                },
+                phoneNum: {
+                    value: props.phoneNum || '',
+                    validation: {
+                        required: true,
+                        isNumeric: true,
+                        minLength: 10,
+                        maxLenght: 10
+                    },
+                    valid: false,
+                    touched: false,
+                },
                 prefWayOfComm: props.prefWayOfComm || '',
                 englLevel: props.englLevel || '',
                 availableToStart: props.availableToStart || '',
@@ -25,6 +63,8 @@ class Form extends Component {
             cancel: props.cancel,
             editMode: props.show,
             save: props.save,
+            formIsValid: false,
+            nameValid: true
         };
         this.submit = this.submit.bind(this);
         this.inputHandler = this.inputHandler.bind(this);
@@ -33,9 +73,26 @@ class Form extends Component {
 
     //Store form input values in state
     inputHandler = (e) => {
-        const updatedApplicant = { ...this.state.applicant };
-        updatedApplicant[e.target.name] = e.target.value;
-        this.setState({ applicant: updatedApplicant });
+        // const updatedApplicant = { ...this.state.applicant };
+        // updatedApplicant[e.target.name] = e.target.value;
+
+        // const currentField = e.target.name;
+        // console.log(currentField);
+        let isValid = checkValidity(e.target.value, this.state.applicant[e.target.name].validation);
+        const updatedField = updateObject(this.state.applicant[e.target.name], {
+            value: e.target.value,
+            valid: checkValidity(e.target.value, this.state.applicant[e.target.name].validation),
+            touched: true
+        });
+        const updatedApplicant = { ...this.state.applicant }
+        updatedApplicant[e.target.name] = updatedField;
+
+
+        let formIsValid = true;
+
+        formIsValid = updatedApplicant[e.target.name].valid && formIsValid;
+
+        this.setState({ applicant: updatedApplicant, formIsValid: formIsValid });
     };
 
     //Check button state 
@@ -47,7 +104,11 @@ class Form extends Component {
 
     submit = (e) => {
         e.preventDefault();
-        this.props.submit(this.state.applicant)
+        if (this.state.formIsValid) {
+            this.props.submit(this.state.applicant)
+        } else {
+
+        }
     }
 
     saveEditedApplicantHandler = (e) => {
@@ -57,44 +118,53 @@ class Form extends Component {
     }
 
     render() {
+        // let invalidClasses = {
+
+        // }
         let formClasses = this.state.editMode ? 'MainForm FormForEdit' : 'MainForm';
-        let cancelBtn = this.state.editMode ? <input type="submit" className="CancelBtn" value='Cancel' onClick={this.cancel} /> : null; return (
+        let cancelBtn = this.state.editMode ? <input type="submit" className="CancelBtn" value='Cancel' onClick={this.cancel} /> : null;
+        // let invalidMessage = this.state.formIsValid ? null : <p className='Invalid'>Please fill all the required fields with valid information</p>
+        return (
             <React.Fragment>
                 <form className={formClasses} onSubmit={this.state.editMode ? this.saveEditedApplicantHandler : this.submit}>
                     <fieldset>
                         <legend className='Student'>{this.state.editMode ? 'Edit Student Info' : 'Add Student'}</legend>
                         <label>Name *:</label><br />
                         <input
+                            className={(!this.state.applicant.name.valid && !this.state.applicant.name.touched) || this.state.applicant.name.valid ? 'Valid' : 'Invalid'}
                             onChange={this.inputHandler}
                             type="text"
                             name="name"
                             placeholder="Enter student name..."
-                            value={this.state.applicant.name} />
+                            value={this.state.applicant.name.value} />
                         <br />
                         <label>Email *:</label><br />
                         <input
+                            className={(!this.state.applicant.email.valid && !this.state.applicant.email.touched) || this.state.applicant.email.valid ? 'Valid' : 'Invalid'}
                             onChange={this.inputHandler}
                             type="email"
                             name="email"
                             placeholder="Enter e-mail..."
-                            value={this.state.applicant.email} />
+                            value={this.state.applicant.email.value} />
                         <br />
                         <label>Age *:</label><br />
                         <input
+                            className={(!this.state.applicant.age.valid && !this.state.applicant.age.touched) || this.state.applicant.age.valid ? 'Valid' : 'Invalid'}
                             onChange={this.inputHandler}
                             type="number"
                             name="age"
                             placeholder="Enter student age..."
-                            value={this.state.applicant.age} />
+                            value={this.state.applicant.age.value} />
                         <br />
                         <label>Phone Number *:</label><br />
                         <input
+                            className={!this.state.applicant.phoneNum.valid && !this.state.applicant.age.touched ? 'Valid' : 'Invalid'}
                             onChange={this.inputHandler}
                             className="PhoneNumber"
                             type="number"
                             name="phoneNum"
                             placeholder="Enter Phone 08..."
-                            value={this.state.applicant.phoneNum} />
+                            value={this.state.applicant.phoneNum.value} />
 
                         <p className="PrefCom">Preferred Way of Communication *</p>
                         <div className="EmailRadio">

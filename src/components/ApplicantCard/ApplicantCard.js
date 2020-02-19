@@ -99,39 +99,39 @@ class ApplicantCard extends Component {
                         <tbody className="StudentCart__wrapper-body">
                             <tr className="StudentCart__wrapper-body-row" >
                                 <td className="Student-info-title">Name:</td>
-                                <td className="NameCart" name="nameCart">{this.state.applicant.name}</td>
+                                <td className="NameCart" name="nameCart">{this.state.applicant.name.value}</td>
                             </tr>
                             <tr className="StudentCart__wrapper-body-row">
                                 <td className="Student-info-title">E-mail:</td>
-                                <td className="EmailCart" name="emailCart">{this.state.applicant.email}</td>
+                                <td className="EmailCart" name="emailCart">{this.state.applicant.email.value}</td>
                             </tr>
                             <tr className="StudentCart__wrapper-body-row" >
                                 <td className="Student-info-title">Age:</td>
-                                <td className="phoneNumCart" name="phoneNumCart">{this.state.applicant.age}</td>
+                                <td className="phoneNumCart" name="ageCart">{this.state.applicant.age.value}</td>
                             </tr>
                             <tr className="studentCart__wrapper-body-row" >
                                 <td className="Student-info-title">Phone Number:</td>
-                                <td className="phoneNumCart" name="phoneNumCart">{this.state.applicant.phoneNum}</td>
+                                <td className="phoneNumCart" name="phoneNumCart">{this.state.applicant.phoneNum.value}</td>
                             </tr>
                             <tr className="studentCart__wrapper-body-row" >
                                 <td className="Student-info-title">Preferred Way of Communication:</td>
-                                <td className="PrefNameCart" name="prefNameCart">{this.state.applicant.prefWayOfComm}</td>
+                                <td className="PrefNameCart" name="prefNameCart">{this.state.applicant.prefWayOfComm.value}</td>
                             </tr>
                             <tr className="studentCart__wrapper-body-row" >
                                 <td className="Student-info-title">English Level:</td>
-                                <td className="EnglLevelCart" name="englLevelCart">{this.state.applicant.englLevel}</td>
+                                <td className="EnglLevelCart" name="englLevelCart">{this.state.applicant.englLevel.value}</td>
                             </tr>
                             <tr className="studentCart__wrapper-body-row" >
                                 <td className="Student-info-title">Available to Start:</td>
-                                <td className="DateCart" name="dateCart" >{this.state.applicant.availableToStart}</td>
+                                <td className="DateCart" name="dateCart" >{this.state.applicant.availableToStart.value}</td>
                             </tr>
                             <tr className="StudentCart__wrapper-body-row" >
                                 <td className="Student-info-title">Technical Skills and Courses:</td>
-                                <td className="TechSkillsCart" name="techSkillsCart">{this.state.applicant.techSkills}</td>
+                                <td className="TechSkillsCart" name="techSkillsCart">{this.state.applicant.techSkills.value}</td>
                             </tr>
                             <tr className="StudentCart__wrapper-body-row" >
                                 <td className="Student-info-title">Short Personal Presentation:</td>
-                                <td className="ShortPresentationCart" name="shortPresentationCart">{this.state.applicant.shortPres}</td>
+                                <td className="ShortPresentationCart" name="shortPresentationCart">{this.state.applicant.shortPres.value}</td>
                             </tr>
                             <tr className="StudentCart__wrapper-body-row" >
                                 <td className="Student-info-title">Study from home:</td>

@@ -86,10 +86,10 @@ class ApplicantCards extends Component {
                     key={applicant.id}
                     currentApplicant={applicant}
                     id={applicant.id}
-                    name={applicant.name}
-                    email={applicant.email}
-                    age={applicant.age}
-                    phoneNum={applicant.phoneNum}
+                    name={applicant.name.value}
+                    email={applicant.email.value}
+                    age={applicant.age.value}
+                    phoneNum={applicant.phoneNum.value}
                     prefWayOfComm={applicant.prefWayOfComm}
                     englLevel={applicant.englLevel}
                     availableToStart={applicant.availableToStart}
