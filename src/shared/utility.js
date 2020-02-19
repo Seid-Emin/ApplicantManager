@@ -21,7 +21,7 @@ export const checkValidity = (value, rules) => {
     }
 
     if (rules.biggerThan) {
-        isValid = value >= rules.biggerThan && value <= 100 && isValid
+        isValid = value >= 18 && value <= 100 && isValid
     }
 
     if (rules.minLength) {
