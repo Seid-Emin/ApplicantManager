@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import axios from '../../axios';
+import PropTypes from 'prop-types';
 
+import axios from '../../axios';
 import ApplicantCard from '../../components/ApplicantCard/ApplicantCard';
 import './ApplicantCards.css';
 
@@ -116,6 +117,13 @@ class ApplicantCards extends Component {
             </React.Fragment>
         )
     }
+}
+
+ApplicantCards.propTypes = {
+    applicants: PropTypes.arrayOf(PropTypes.object),
+    editedApplicant: PropTypes.bool,
+    delete: PropTypes.func,
+    editMode: PropTypes.bool
 }
 
 export default ApplicantCards;

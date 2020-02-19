@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 import './Form.css';
 
@@ -194,7 +195,23 @@ class Form extends Component {
     };
 }
 
-
+Form.propTypes = {
+    cancel: PropTypes.bool,
+    editMode: PropTypes.bool,
+    save: PropTypes.func,
+    applicant: PropTypes.exact({
+        name: PropTypes.string.isRequired,
+        email: PropTypes.any.isRequired,
+        age: PropTypes.number.isRequired,
+        phoneNum: PropTypes.number.isRequired,
+        prefWayOfComm: PropTypes.any.isRequired,
+        englLevel: PropTypes.string.isRequired,
+        availableToStart: PropTypes.string.isRequired,
+        techSkills: PropTypes.string,
+        shortPres: PropTypes.string,
+        studyFromHome: PropTypes.bool,
+    })
+}
 
 
 export default Form;
