@@ -78,17 +78,17 @@ class Form extends Component {
                 },
                 techSkills: {
                     value: props.techSkills || '',
-                    validation: {},
+                    validation: { required: false },
                     valid: true
                 },
                 shortPres: {
                     value: props.shortPres || '',
-                    validation: {},
+                    validation: { required: false },
                     valid: true
                 },
                 studyFromHome: {
                     value: props.studyFromHome || false,
-                    validation: {},
+                    validation: { required: false },
                     valid: true
                 },
                 id: props.id
@@ -106,12 +106,6 @@ class Form extends Component {
 
     //Store form input values in state
     inputHandler = (e) => {
-        // const updatedApplicant = { ...this.state.applicant };
-        // updatedApplicant[e.target.name] = e.target.value;
-
-        // const currentField = e.target.name;
-        // console.log(currentField);
-        //let isValid = checkValidity(e.target.value, this.state.applicant[e.target.name].validation);
         const updatedField = updateObject(this.state.applicant[e.target.name], {
             value: e.target.value,
             valid: checkValidity(e.target.value, this.state.applicant[e.target.name].validation),
@@ -120,38 +114,24 @@ class Form extends Component {
         const updatedApplicant = { ...this.state.applicant }
         updatedApplicant[e.target.name] = updatedField;
 
-
         let formIsValid = true;
-
-        formIsValid = updatedApplicant[e.target.name].valid && formIsValid;
-
+        for (var fields in updatedApplicant) {
+            if (updatedApplicant.hasOwnProperty(fields) && fields !== 'id') {
+                formIsValid = updatedApplicant[fields].valid && formIsValid;
+            }
+        }
         this.setState({ applicant: updatedApplicant, formIsValid: formIsValid });
     };
 
     //Check button state 
     checkChangeHandler = () => {
         const updatedApplicant = { ...this.state.applicant };
-        updatedApplicant.studyFromHome = !this.state.applicant.studyFromHome;
+        updatedApplicant.studyFromHome.value = !this.state.applicant.studyFromHome.value;
         this.setState({ applicant: updatedApplicant });
     };
 
     submit = (e) => {
         e.preventDefault();
-        let formIsValid = true;
-        const applicant = { ...this.state.applicant };
-
-        for (var fields in applicant) {
-            if (applicant.hasOwnProperty(fields) && fields !== 'id') {
-                formIsValid = applicant[fields].valid && formIsValid;
-            }
-        }
-
-        // Object.keys(applicant).map(function (fields) {
-        //     if (fields != 'id') {
-        //         formIsValid = applicant[fields].valid && formIsValid;
-        //     }
-        // });
-
         if (this.state.formIsValid) {
             this.props.submit(this.state.applicant);
             this.setState({ errorSubmit: false });
@@ -162,16 +142,18 @@ class Form extends Component {
 
     saveEditedApplicantHandler = (e) => {
         e.preventDefault();
-        let appState = this.state.applicant;
-        this.props.save(appState)
+        if (this.state.formIsValid) {
+            let appState = this.state.applicant;
+            this.props.save(appState)
+            this.setState({ errorSubmit: false });
+        } else {
+            this.setState({ errorSubmit: true });
+        }
     }
 
     render() {
-        // let invalidClasses = {
-
-        // }
         let formClasses = this.state.editMode ? 'MainForm FormForEdit' : 'MainForm';
-        let cancelBtn = this.state.editMode ? <input type="submit" className="CancelBtn" value='Cancel' onClick={this.cancel} /> : null;
+        let cancelBtn = this.state.editMode ? <input type="submit" className="CancelBtn" value='Cancel' onClick={this.state.cancel} /> : null;
         let invalidMessage = !this.state.errorSubmit ? null : <p className='Invalid'>Please fill all the required fields with valid information</p>
         return (
             <React.Fragment>
