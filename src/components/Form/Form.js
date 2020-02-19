@@ -220,8 +220,6 @@ class Form extends Component {
                                     checked={this.state.applicant.prefWayOfComm.value === 'Phone'} />Phone
                                    </label>
                         </div>
-
-
                         <label className="EnglLevelLabel">English Level *</label>
                         <br />
                         <select
