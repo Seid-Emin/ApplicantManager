@@ -78,17 +78,20 @@ class Form extends Component {
                 },
                 techSkills: {
                     value: props.techSkills || '',
-                    validation: {}
+                    validation: {},
+                    valid: true
                 },
                 shortPres: {
                     value: props.shortPres || '',
-                    validation: {}
+                    validation: {},
+                    valid: true
                 },
                 studyFromHome: {
                     value: props.studyFromHome || false,
-                    validation: {}
+                    validation: {},
+                    valid: true
                 },
-                id: props.id,
+                id: props.id
             },
             cancel: props.cancel,
             editMode: props.show,
@@ -134,6 +137,21 @@ class Form extends Component {
 
     submit = (e) => {
         e.preventDefault();
+        let formIsValid = true;
+        const applicant = { ...this.state.applicant };
+
+        for (var fields in applicant) {
+            if (applicant.hasOwnProperty(fields) && fields !== 'id') {
+                formIsValid = applicant[fields].valid && formIsValid;
+            }
+        }
+
+        // Object.keys(applicant).map(function (fields) {
+        //     if (fields != 'id') {
+        //         formIsValid = applicant[fields].valid && formIsValid;
+        //     }
+        // });
+
         if (this.state.formIsValid) {
             this.props.submit(this.state.applicant);
             this.setState({ errorSubmit: false });
@@ -204,7 +222,6 @@ class Form extends Component {
                                     type="radio"
                                     name="prefWayOfComm"
                                     value="Email"
-                                    className="Email"
                                     checked={this.state.applicant.prefWayOfComm.value === 'Email'} />E-mail
                                  </label>
                         </div>
@@ -216,7 +233,6 @@ class Form extends Component {
                                     type="radio"
                                     name="prefWayOfComm"
                                     value="Phone"
-                                    className="Phone"
                                     checked={this.state.applicant.prefWayOfComm.value === 'Phone'} />Phone
                                    </label>
                         </div>
@@ -276,7 +292,7 @@ class Form extends Component {
                                 type="checkbox"
                                 name="studyFromHome"
                                 value="Study from home"
-                                checked={this.state.applicant.studyFromHome.value} />Study from home
+                                checked={this.state.applicant.studyFromHome.value === 'Yes' ? true : null} />Study from home
                               <span className="Opt">
                                 (optional)</span>
                         </label>

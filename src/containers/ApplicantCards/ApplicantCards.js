@@ -86,10 +86,10 @@ class ApplicantCards extends Component {
                     key={applicant.id}
                     currentApplicant={applicant}
                     id={applicant.id}
-                    name={applicant.name.value}
-                    email={applicant.email.value}
-                    age={applicant.age.value}
-                    phoneNum={applicant.phoneNum.value}
+                    name={applicant.name}
+                    email={applicant.email}
+                    age={applicant.age}
+                    phoneNum={applicant.phoneNum}
                     prefWayOfComm={applicant.prefWayOfComm}
                     englLevel={applicant.englLevel}
                     availableToStart={applicant.availableToStart}
@@ -97,7 +97,7 @@ class ApplicantCards extends Component {
                     shortPres={applicant.shortPres}
                     studyFromHome={applicant.studyFromHome}
                     delete={this.deleteApplicantHandler}
-                    clicked={() => this.clickedApplicant(applicant.id)}
+                // clicked={() => this.clickedApplicant(applicant.id)}
                 />
             )) : null;
 
