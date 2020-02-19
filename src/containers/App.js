@@ -20,25 +20,8 @@ class App extends Component {
       studyFromHome: false
     },
     submited: false,
-    showBackdrop: false,
-    editMode: false,
     submitedApplicantId: null
   });
-
-  //Store form input values in state
-  // nameHandler = (e) => {
-  //   const updatedApplicant = { ...this.state.applicant };
-  //   updatedApplicant[e.target.name] = e.target.value;
-  //   this.setState({ applicant: updatedApplicant });
-  // };
-
-  //Check button state 
-  // checkChangeHandler = () => {
-  //   const applicant = this.state.applicant;
-  //   const updatedApplicant = { ...applicant };
-  //   updatedApplicant.studyFromHome = !applicant.studyFromHome;
-  //   this.setState({ applicant: updatedApplicant })
-  // };
 
   //Get form data stored in the state and pass it to server
   submitHandler = (submitApplicant) => {
@@ -71,9 +54,7 @@ class App extends Component {
             submited={this.state.submited}
             submitedApplicantId={this.state.submitedApplicantId}
           />
-
         </div>
-
       </React.Fragment>
     )
   }

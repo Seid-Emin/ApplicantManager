@@ -44,29 +44,12 @@ class ApplicantCard extends Component {
         if (this.props.submited) {
             // console.log('ApplicantCards ComponentDidUpdate');
             axios.put('/applicants/' + this.props.submitedApplicantId + '.json')
-                .then(res => {
-                    // const fetchedApplicants = [...this.state.applicant];
-                    // // console.log(res);
-
-                    // fetchedApplicants.push({
-                    //     ...res.data,
-                    //     id: this.props.submitedApplicantId
-                    // });
-                    // this.setState({
-                    //     applicant: fetchedApplicants,
-                    // });
-                })
+                .then(res => { })
                 .catch(error => { console.log('something went wrong on componentDidUpdate') }
                 );
         }
     }
 
-    // saveEditedApplicantHandler = (e) => {
-    //     e.preventDefault();
-    //     let appState = this.state.applicant
-    //     this.props.onApplicantSave(appState)
-
-    // }
     saveEditedApplicantHandler = (editedApplicant) => {
         axios.put('/applicants/' + editedApplicant.id + '.json', editedApplicant)
             .then(res => {
@@ -92,8 +75,6 @@ class ApplicantCard extends Component {
             editMode: true
         });
     }
-
-
 
     cancelEditHandler = () => {
         this.setState({ editMode: false })

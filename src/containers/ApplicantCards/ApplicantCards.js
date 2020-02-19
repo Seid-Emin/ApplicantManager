@@ -55,29 +55,15 @@ class ApplicantCards extends Component {
 
     shouldComponentUpdate(nextProps, nextState) {
         console.log(this.state.applicant);
-        if (this.state.applicant === null
-            && this.props.submited === nextProps
+        if (this.props.submited === nextProps
             && this.state.deletedApplicant === nextState.deletedApplicant
             && this.state.editedApplicant === nextState.editedApplicant) {
-            //console.log(this.state.deletedApplicant + ' dont update from ApplicantCards: ' + nextState.deletedApplicant);
-            //console.log('ApplicantCards shouldCompUpdate false');
-            console.log(this.state + 'from False');
-
             return false;
         } else {
-            console.log(this.state + 'from True');
-            // console.log(this.state.deletedApplicant + ' update from ApplicantCards: ' + nextState.deletedApplicant)
-            // console.log('ApplicantCards shouldCompUpdate true');
-            // this.setState({ deletedApplicant: false })
             return true;
 
         }
     }
-
-    // componentDidUpdate() {
-
-    // }
-
 
     deleteApplicantHandler = (id) => {
         axios.delete('/applicants/' + id + '.json')
@@ -93,20 +79,6 @@ class ApplicantCards extends Component {
                 console.log('somethink went wrong on deleting');
             })
     }
-
-    // saveEditedApplicantHandler = (editedApplicant) => {
-    //     const updatedApplicants = [...this.state.applicants];
-    //     const indexOfEditeApplicant = updatedApplicants.findIndex(applicant => {
-    //         return applicant.id === editedApplicant.id
-    //     });
-    //     updatedApplicants[indexOfEditeApplicant] = editedApplicant;
-    //     this.setState({
-    //         applicants: updatedApplicants,
-    //         editedApplicant: true
-    //     })
-    // }
-
-
 
     render() {
 
@@ -130,10 +102,8 @@ class ApplicantCards extends Component {
                 />
             )) : null;
 
-
         return (
             <React.Fragment>
-
                 <div className="StudentInfoOutput">
                     <div className="Info-content-wrapper">
                         <div className="CardWr">
