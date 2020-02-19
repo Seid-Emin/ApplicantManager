@@ -72,16 +72,16 @@ class ApplicantCard extends Component {
         let thisStateApplicant = this.state.applicant
         let editModeForm = this.state.editMode ?
             <Form
-                name={thisStateApplicant.name}
-                email={thisStateApplicant.email}
-                age={thisStateApplicant.age}
-                phoneNum={thisStateApplicant.phoneNum}
-                prefWayOfComm={thisStateApplicant.prefWayOfComm}
-                englLevel={thisStateApplicant.englLevel}
-                availableToStart={thisStateApplicant.availableToStart}
-                techSkills={thisStateApplicant.techSkills}
-                shortPres={thisStateApplicant.shortPres}
-                studyFromHome={thisStateApplicant.studyFromHome}
+                name={thisStateApplicant.name.value}
+                email={thisStateApplicant.email.value}
+                age={thisStateApplicant.age.value}
+                phoneNum={thisStateApplicant.phoneNum.value}
+                prefWayOfComm={thisStateApplicant.prefWayOfComm.value}
+                englLevel={thisStateApplicant.englLevel.value}
+                availableToStart={thisStateApplicant.availableToStart.value}
+                techSkills={thisStateApplicant.techSkills.value}
+                shortPres={thisStateApplicant.shortPres.value}
+                studyFromHome={thisStateApplicant.studyFromHome.value}
                 id={thisStateApplicant.id}
                 show={this.state.editMode}
                 save={this.saveEditedApplicantHandler}

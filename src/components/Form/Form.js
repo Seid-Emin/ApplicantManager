@@ -228,7 +228,7 @@ class Form extends Component {
                             className={(!this.state.applicant.englLevel.valid && !this.state.applicant.englLevel.touched) || this.state.applicant.englLevel.valid ? 'Valid' : 'Invalid'}
                             onChange={this.inputHandler}
                             name='englLevel'
-                            defaultValue={this.state.applicant.englLevel || 'not set'}>
+                            defaultValue={this.state.applicant.englLevel.value || 'not set'}>
                             <option value="">-- None --</option>
                             <option name='A1' value="A1">A1</option>
                             <option name='A2' value="A2">A2</option>
