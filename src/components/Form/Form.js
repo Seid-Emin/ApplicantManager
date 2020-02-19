@@ -35,8 +35,7 @@ class Form extends Component {
                     validation: {
                         required: true,
                         isNumeric: true,
-                        biggerThan: '18',
-                        lessThan: '100'
+                        biggerThan: '18'
                     },
                     valid: false,
                     touched: false,
@@ -47,24 +46,55 @@ class Form extends Component {
                         required: true,
                         isNumeric: true,
                         minLength: 10,
-                        maxLenght: 10
+                        maxLength: 10
                     },
                     valid: false,
                     touched: false,
                 },
-                prefWayOfComm: props.prefWayOfComm || '',
-                englLevel: props.englLevel || '',
-                availableToStart: props.availableToStart || '',
-                techSkills: props.techSkills || '',
-                shortPres: props.shortPres || '',
-                studyFromHome: props.studyFromHome || false,
+                prefWayOfComm: {
+                    value: props.prefWayOfComm || '',
+                    validation: {
+                        required: true,
+                    },
+                    valid: false,
+                    touched: false,
+                },
+                englLevel: {
+                    value: props.englLevel || '',
+                    validation: {
+                        required: true,
+                    },
+                    valid: false,
+                    touched: false,
+                },
+                availableToStart: {
+                    value: props.availableToStart || '',
+                    validation: {
+                        required: true,
+                        isDate: true
+                    },
+                    valid: false,
+                    touched: false,
+                },
+                techSkills: {
+                    value: props.techSkills || '',
+                    validation: {}
+                },
+                shortPres: {
+                    value: props.shortPres || '',
+                    validation: {}
+                },
+                studyFromHome: {
+                    value: props.studyFromHome || false,
+                    validation: {}
+                },
                 id: props.id,
             },
             cancel: props.cancel,
             editMode: props.show,
             save: props.save,
             formIsValid: false,
-            nameValid: true
+            errorSubmit: false
         };
         this.submit = this.submit.bind(this);
         this.inputHandler = this.inputHandler.bind(this);
@@ -78,7 +108,7 @@ class Form extends Component {
 
         // const currentField = e.target.name;
         // console.log(currentField);
-        let isValid = checkValidity(e.target.value, this.state.applicant[e.target.name].validation);
+        //let isValid = checkValidity(e.target.value, this.state.applicant[e.target.name].validation);
         const updatedField = updateObject(this.state.applicant[e.target.name], {
             value: e.target.value,
             valid: checkValidity(e.target.value, this.state.applicant[e.target.name].validation),
@@ -105,9 +135,10 @@ class Form extends Component {
     submit = (e) => {
         e.preventDefault();
         if (this.state.formIsValid) {
-            this.props.submit(this.state.applicant)
+            this.props.submit(this.state.applicant);
+            this.setState({ errorSubmit: false });
         } else {
-
+            this.setState({ errorSubmit: true });
         }
     }
 
@@ -123,7 +154,7 @@ class Form extends Component {
         // }
         let formClasses = this.state.editMode ? 'MainForm FormForEdit' : 'MainForm';
         let cancelBtn = this.state.editMode ? <input type="submit" className="CancelBtn" value='Cancel' onClick={this.cancel} /> : null;
-        // let invalidMessage = this.state.formIsValid ? null : <p className='Invalid'>Please fill all the required fields with valid information</p>
+        let invalidMessage = !this.state.errorSubmit ? null : <p className='Invalid'>Please fill all the required fields with valid information</p>
         return (
             <React.Fragment>
                 <form className={formClasses} onSubmit={this.state.editMode ? this.saveEditedApplicantHandler : this.submit}>
@@ -158,35 +189,35 @@ class Form extends Component {
                         <br />
                         <label>Phone Number *:</label><br />
                         <input
-                            className={!this.state.applicant.phoneNum.valid && !this.state.applicant.age.touched ? 'Valid' : 'Invalid'}
+                            className={(!this.state.applicant.phoneNum.valid && !this.state.applicant.phoneNum.touched) || this.state.applicant.phoneNum.valid ? 'Valid' : 'Invalid'}
                             onChange={this.inputHandler}
-                            className="PhoneNumber"
-                            type="number"
+                            type="text"
                             name="phoneNum"
                             placeholder="Enter Phone 08..."
                             value={this.state.applicant.phoneNum.value} />
-
                         <p className="PrefCom">Preferred Way of Communication *</p>
                         <div className="EmailRadio">
                             <label>
                                 <input
+                                    className={(!this.state.applicant.prefWayOfComm.valid && !this.state.applicant.prefWayOfComm.touched) || this.state.applicant.prefWayOfComm.valid ? 'Valid' : 'Invalid'}
                                     onChange={this.inputHandler}
                                     type="radio"
                                     name="prefWayOfComm"
                                     value="Email"
                                     className="Email"
-                                    checked={this.state.applicant.prefWayOfComm === 'Email'} />E-mail
+                                    checked={this.state.applicant.prefWayOfComm.value === 'Email'} />E-mail
                                  </label>
                         </div>
                         <div className="PhoneRadio">
                             <label>
                                 <input
+                                    className={(!this.state.applicant.prefWayOfComm.valid && !this.state.applicant.prefWayOfComm.touched) || this.state.applicant.prefWayOfComm.valid ? 'Valid' : 'Invalid'}
                                     onChange={this.inputHandler}
                                     type="radio"
                                     name="prefWayOfComm"
                                     value="Phone"
                                     className="Phone"
-                                    checked={this.state.applicant.prefWayOfComm === 'Phone'} />Phone
+                                    checked={this.state.applicant.prefWayOfComm.value === 'Phone'} />Phone
                                    </label>
                         </div>
 
@@ -194,9 +225,9 @@ class Form extends Component {
                         <label className="EnglLevelLabel">English Level *</label>
                         <br />
                         <select
+                            className={(!this.state.applicant.englLevel.valid && !this.state.applicant.englLevel.touched) || this.state.applicant.englLevel.valid ? 'Valid' : 'Invalid'}
                             onChange={this.inputHandler}
                             name='englLevel'
-                            className="EnglLevel"
                             defaultValue={this.state.applicant.englLevel || 'not set'}>
                             <option value="">-- None --</option>
                             <option name='A1' value="A1">A1</option>
@@ -210,10 +241,11 @@ class Form extends Component {
                         <label name='availableToStart' className="DateAvailable">Available to Start *:</label>
                         <br />
                         <input
+                            className={(!this.state.applicant.availableToStart.valid && !this.state.applicant.availableToStart.touched) || this.state.applicant.availableToStart.valid ? 'Valid' : 'Invalid'}
                             onChange={this.inputHandler}
-                            type="date" className="Date"
+                            type="date"
                             name="availableToStart"
-                            defaultValue={this.state.applicant.availableToStart} />
+                            defaultValue={this.state.applicant.availableToStart.value} />
                         <br />
                         <label>Technical Skills and Courses <span className="Opt">(optional)</span>:</label>
                         <br />
@@ -223,7 +255,7 @@ class Form extends Component {
                             className="TechSkills"
                             rows="2" cols="40"
                             placeholder="Enter info..."
-                            value={this.state.applicant.techSkills}>
+                            value={this.state.applicant.techSkills.value}>
                         </textarea>
                         <br /><br />
                         <label>Short Personal Presentation
@@ -237,7 +269,7 @@ class Form extends Component {
                             rows="2"
                             cols="40"
                             placeholder="Reason for joining the program..."
-                            value={this.state.applicant.shortPres}>
+                            value={this.state.applicant.shortPres.value}>
                         </textarea>
                         <br />
                         <label className="StudyFromHomeLabel">
@@ -246,7 +278,7 @@ class Form extends Component {
                                 type="checkbox"
                                 name="studyFromHome"
                                 value="Study from home"
-                                checked={this.state.applicant.studyFromHome} />Study from home
+                                checked={this.state.applicant.studyFromHome.value} />Study from home
                               <span className="Opt">
                                 (optional)</span>
                         </label>
@@ -257,6 +289,7 @@ class Form extends Component {
                             value={this.state.show ? 'Save' : "Submit"} />
                         {cancelBtn}
                         <p className="RequiredFields">* - fields requred</p>
+                        {invalidMessage}
                     </fieldset>
                 </form>
             </React.Fragment>
