@@ -212,15 +212,18 @@ class Form extends Component {
     render() {
         let formClasses = this.state.editMode ? 'MainForm FormForEdit' : 'MainForm';
         let cancelBtn = this.state.editMode ? <input type="submit" className="CancelBtn" value='Cancel' onClick={this.state.cancel} /> : null;
-        let invalidMessage = !this.state.errorSubmit ? null : <p className='Invalid'>Please fill all the required fields with valid information</p>
-        let dublicateEmail = !this.state.dublicateEmail || (!this.state.dublicateEmail && this.state.editMode) ? <label>Email *</label> : <label className='Invalid'>Email exists *</label>
-        let dublicatePhone = !this.state.dublicatePhone || (!this.state.dublicatePhone && this.state.editMode) ? <label>Phone Number *</label> : <label className='Invalid'>Phone Number exists *</label>
+        let invalidMessage = !this.state.errorSubmit ? null : <p className='Invalid'>Please fill all the required fields with
+        valid information</p>
+
+        let dublicateEmail = !this.state.dublicateEmail || (!this.state.dublicateEmail && this.state.editMode) ? <label>Email <span className='Required'>*</span></label> : <label className='Invalid'>Email exists <span className='Required'>*</span></label>
+
+        let dublicatePhone = !this.state.dublicatePhone || (!this.state.dublicatePhone && this.state.editMode) ? <label>Phone Number <span className='Required'>*</span></label> : <label className='Invalid'>Phone Number exists <span className='Required'>*</span></label>
         return (
             <React.Fragment>
                 <form className={formClasses} onSubmit={this.state.editMode ? this.saveEditedApplicantHandler : this.submit}>
                     <fieldset>
                         <legend className='Student'>{this.state.editMode ? 'Edit Student Info' : 'Add Student'}</legend>
-                        <label>Name *:</label><br />
+                        <label>Name <span className='Required'>*</span>:</label><br />
                         <input
                             className={(!this.state.applicant.name.valid && !this.state.applicant.name.touched) || this.state.applicant.name.valid ? 'Valid' : 'Invalid'}
                             onChange={this.inputHandler}
@@ -238,7 +241,7 @@ class Form extends Component {
                             placeholder="Enter e-mail..."
                             value={this.state.applicant.email.value} />
                         <br />
-                        <label>Age *:</label><br />
+                        <label>Age <span className='Required'>*</span>:</label><br />
                         <input
                             className={(!this.state.applicant.age.valid && !this.state.applicant.age.touched) || this.state.applicant.age.valid ? 'Valid' : 'Invalid'}
                             onChange={this.inputHandler}
@@ -255,7 +258,7 @@ class Form extends Component {
                             name="phoneNum"
                             placeholder="Enter Phone 08..."
                             value={this.state.applicant.phoneNum.value} />
-                        <p className={(!this.state.applicant.prefWayOfComm.valid && !this.state.applicant.prefWayOfComm.touched) || this.state.applicant.prefWayOfComm.valid ? 'Valid' : 'Invalid'}>Preferred Way of Communication *</p>
+                        <p className={(!this.state.applicant.prefWayOfComm.valid && !this.state.applicant.prefWayOfComm.touched) || this.state.applicant.prefWayOfComm.valid ? 'Valid' : 'Invalid'}>Preferred Way of Communication <span className='Required'>*</span></p>
                         <div className="EmailRadio">
                             <label>
                                 <input
@@ -276,7 +279,7 @@ class Form extends Component {
                                     checked={this.state.applicant.prefWayOfComm.value === 'Phone'} />Phone
                                    </label>
                         </div>
-                        <label className={(!this.state.applicant.englLevel.valid && !this.state.applicant.englLevel.touched) || this.state.applicant.englLevel.valid ? 'Valid' : 'Invalid'}>English Level *</label>
+                        <label className={(!this.state.applicant.englLevel.valid && !this.state.applicant.englLevel.touched) || this.state.applicant.englLevel.valid ? 'Valid' : 'Invalid'}>English Level <span className='Required'>*</span></label>
                         <br />
                         <select
                             onChange={this.inputHandler}
@@ -291,7 +294,7 @@ class Form extends Component {
                             <option name='C2' value="C2">C2</option>
                         </select>
                         <br />
-                        <label name='availableToStart' className="DateAvailable">Available to Start *:</label>
+                        <label name='availableToStart' className="DateAvailable">Available to Start <span className='Required'>*</span>:</label>
                         <br />
                         <input
                             className={(!this.state.applicant.availableToStart.valid && !this.state.applicant.availableToStart.touched) || this.state.applicant.availableToStart.valid ? 'Valid' : 'Invalid'}

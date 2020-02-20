@@ -123,3 +123,7 @@ select {
     border: 1px solid red;
     background-color: salmon;
 }
+
+.Required {
+    color: red;
+}
