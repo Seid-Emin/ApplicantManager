@@ -37,7 +37,7 @@ class App extends Component {
       <React.Fragment>
         <h1 className="Title">Application Manager</h1>
         <div className="MainWrapper">
-          <Form submit={this.submitHandler} />
+          <Form submit={this.submitHandler} submited={this.state.submited} />
           <ApplicantCards
             submited={this.state.submited}
             submitedApplicantId={this.state.submitedApplicantId}

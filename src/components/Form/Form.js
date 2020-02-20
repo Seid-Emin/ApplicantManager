@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import './Form.css';
 
 import { checkValidity, updateObject } from '../../shared/utility';
+import axios from '../../axios';
 
 
 
@@ -91,17 +92,37 @@ class Form extends Component {
                     validation: { required: false },
                     valid: true
                 },
-                id: props.id
+                id: props.id || ''
             },
             cancel: props.cancel,
             editMode: props.show,
             save: props.save,
             formIsValid: false,
-            errorSubmit: false
+            errorSubmit: false,
+            dublicateEmail: false,
+            dublicatePhone: false,
+            applicants: []
         };
+        this.checkDublicateStudentEmailPhone = this.checkDublicateStudentEmailPhone.bind(this);
         this.submit = this.submit.bind(this);
         this.inputHandler = this.inputHandler.bind(this);
         this.saveEditedApplicantHandler = this.saveEditedApplicantHandler.bind(this);
+    }
+
+    componentDidMount() {
+        axios.get('/applicants.json')
+            .then(res => {
+                const fetchedApplicants = [];
+                for (let key in res.data) {
+                    fetchedApplicants.push({
+                        ...res.data[key],
+                        id: key
+                    });
+                }
+                this.setState({ applicants: fetchedApplicants })
+            })
+            .catch(error => { console.log('something went wrong on get') }
+            )
     }
 
     //Store form input values in state
@@ -109,17 +130,12 @@ class Form extends Component {
         const updatedField = updateObject(this.state.applicant[e.target.name], {
             value: e.target.value,
             valid: checkValidity(e.target.value, this.state.applicant[e.target.name].validation),
+            shouldValidate: !checkValidity(e.target.value, this.state.applicant[e.target.name].validation),
             touched: true
         });
         const updatedApplicant = { ...this.state.applicant }
         updatedApplicant[e.target.name] = updatedField;
 
-        // let formIsValid = true;
-        // for (var fields in updatedApplicant) {
-        //     if (updatedApplicant.hasOwnProperty(fields) && fields !== 'id') {
-        //         formIsValid = updatedApplicant[fields].valid && formIsValid;
-        //     }
-        // }
         this.setState({ applicant: updatedApplicant });
     };
 
@@ -130,21 +146,48 @@ class Form extends Component {
         this.setState({ applicant: updatedApplicant });
     };
 
+    checkDublicateStudentEmailPhone = () => {
+        let updatedEmail = false;
+        let updatedPhone = false;
+        this.state.applicants.map(arrApplicant => {
+            if (arrApplicant.email.value === this.state.applicant.email.value) {
+                updatedEmail = true;
+            } else if (arrApplicant.phoneNum.value === this.state.applicant.phoneNum.value) {
+                updatedPhone = true;
+            }
+            return this.setState({ dublicatePhone: updatedPhone, dublicateEmail: updatedEmail });
+        });
+
+    }
+
     submit = (e) => {
         e.preventDefault();
-        const updatedApplicant = { ...this.state.applicant }
+        const applicant = { ...this.state.applicant }
         let formIsValid = true;
-        for (var fields in updatedApplicant) {
-            if (updatedApplicant.hasOwnProperty(fields) && fields !== 'id') {
-                formIsValid = updatedApplicant[fields].valid && formIsValid;
+        for (var fields in applicant) {
+            if (applicant.hasOwnProperty(fields) && fields !== 'id') {
+                formIsValid = applicant[fields].valid && formIsValid;
             }
         }
-        if (formIsValid) {
-            this.props.submit(this.state.applicant);
-            this.setState({ applicant: updatedApplicant, errorSubmit: false });
+        if (formIsValid && this.state.dublicateEmail === false && this.state.dublicatePhone === false) {
+            this.props.submit(applicant);
+
+            //Reset form fields
+            axios.get('/applicant/form.json')
+                .then(res => {
+                    let clearForm = {};
+                    for (let key in res.data) {
+                        clearForm = res.data[key];
+                    }
+                    this.setState({ applicant: clearForm });
+                })
+                .catch(error => { console.log('something went wrong on componentDidUpdate') }
+                );
+            this.setState({ errorSubmit: false });
         } else {
-            this.setState({ applicant: updatedApplicant, errorSubmit: true });
+            this.setState({ errorSubmit: true });
         }
+
     }
 
     saveEditedApplicantHandler = (e) => {
@@ -170,6 +213,8 @@ class Form extends Component {
         let formClasses = this.state.editMode ? 'MainForm FormForEdit' : 'MainForm';
         let cancelBtn = this.state.editMode ? <input type="submit" className="CancelBtn" value='Cancel' onClick={this.state.cancel} /> : null;
         let invalidMessage = !this.state.errorSubmit ? null : <p className='Invalid'>Please fill all the required fields with valid information</p>
+        let dublicateEmail = !this.state.dublicateEmail || (!this.state.dublicateEmail && this.state.editMode) ? <label>Email *</label> : <label className='Invalid'>Email exists *</label>
+        let dublicatePhone = !this.state.dublicatePhone || (!this.state.dublicatePhone && this.state.editMode) ? <label>Phone Number *</label> : <label className='Invalid'>Phone Number exists *</label>
         return (
             <React.Fragment>
                 <form className={formClasses} onSubmit={this.state.editMode ? this.saveEditedApplicantHandler : this.submit}>
@@ -184,7 +229,7 @@ class Form extends Component {
                             placeholder="Enter student name..."
                             value={this.state.applicant.name.value} />
                         <br />
-                        <label>Email *:</label><br />
+                        {dublicateEmail}<br />
                         <input
                             className={(!this.state.applicant.email.valid && !this.state.applicant.email.touched) || this.state.applicant.email.valid ? 'Valid' : 'Invalid'}
                             onChange={this.inputHandler}
@@ -202,7 +247,7 @@ class Form extends Component {
                             placeholder="Enter student age..."
                             value={this.state.applicant.age.value} />
                         <br />
-                        <label>Phone Number *:</label><br />
+                        {dublicatePhone}<br />
                         <input
                             className={(!this.state.applicant.phoneNum.valid && !this.state.applicant.phoneNum.touched) || this.state.applicant.phoneNum.valid ? 'Valid' : 'Invalid'}
                             onChange={this.inputHandler}
@@ -214,7 +259,6 @@ class Form extends Component {
                         <div className="EmailRadio">
                             <label>
                                 <input
-                                    className={(!this.state.applicant.prefWayOfComm.valid && !this.state.applicant.prefWayOfComm.touched) || this.state.applicant.prefWayOfComm.valid ? 'Valid' : 'Invalid'}
                                     onChange={this.inputHandler}
                                     type="radio"
                                     name="prefWayOfComm"
@@ -225,7 +269,6 @@ class Form extends Component {
                         <div className="PhoneRadio">
                             <label>
                                 <input
-                                    className={(!this.state.applicant.prefWayOfComm.valid && !this.state.applicant.prefWayOfComm.touched) || this.state.applicant.prefWayOfComm.valid ? 'Valid' : 'Invalid'}
                                     onChange={this.inputHandler}
                                     type="radio"
                                     name="prefWayOfComm"
@@ -233,14 +276,13 @@ class Form extends Component {
                                     checked={this.state.applicant.prefWayOfComm.value === 'Phone'} />Phone
                                    </label>
                         </div>
-                        <label className="EnglLevelLabel">English Level *</label>
+                        <label className={(!this.state.applicant.englLevel.valid && !this.state.applicant.englLevel.touched) || this.state.applicant.englLevel.valid ? 'Valid' : 'Invalid'}>English Level *</label>
                         <br />
                         <select
-                            className={(!this.state.applicant.englLevel.valid && !this.state.applicant.englLevel.touched) || this.state.applicant.englLevel.valid ? 'Valid' : 'Invalid'}
                             onChange={this.inputHandler}
                             name='englLevel'
-                            defaultValue={this.state.applicant.englLevel.value || 'not set'}>
-                            <option value="">-- None --</option>
+                            value={this.state.applicant.englLevel.value ? this.state.applicant.englLevel.value : '-- select --'}>
+                            <option name='' value="">-- select --</option>
                             <option name='A1' value="A1">A1</option>
                             <option name='A2' value="A2">A2</option>
                             <option name='B1' value="B1">B1</option>
@@ -256,7 +298,7 @@ class Form extends Component {
                             onChange={this.inputHandler}
                             type="date"
                             name="availableToStart"
-                            defaultValue={this.state.applicant.availableToStart.value} />
+                            value={this.state.applicant.availableToStart.value ? this.state.applicant.availableToStart.value : 'set date'} />
                         <br />
                         <label>Technical Skills and Courses <span className="Opt">(optional)</span>:</label>
                         <br />
@@ -297,6 +339,7 @@ class Form extends Component {
                         <input
                             type="submit"
                             className="SubmitBtn"
+                            onClick={this.checkDublicateStudentEmailPhone}
                             value={this.state.show ? 'Save' : "Submit"} />
                         {cancelBtn}
                         <p className="RequiredFields">* - fields requred</p>

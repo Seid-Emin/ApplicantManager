@@ -14,7 +14,7 @@ class ApplicantCard extends Component {
             applicant: props.currentApplicant,
             editedApplicant: false,
             delete: props.delete,
-            editMode: false,
+            editMode: false
         };
         this.deleteApplicant = this.deleteApplicant.bind(this);
         this.saveEditedApplicantHandler = this.saveEditedApplicantHandler.bind(this);

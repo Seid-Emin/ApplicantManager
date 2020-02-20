@@ -97,7 +97,6 @@ class ApplicantCards extends Component {
                     shortPres={applicant.shortPres}
                     studyFromHome={applicant.studyFromHome}
                     delete={this.deleteApplicantHandler}
-                // clicked={() => this.clickedApplicant(applicant.id)}
                 />
             )) : null;
 
