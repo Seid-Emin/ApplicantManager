@@ -59,6 +59,7 @@ class ApplicantCard extends Component {
     }
 
     editApplicantHandler = () => {
+
         this.setState({
             editMode: true
         });

@@ -114,13 +114,13 @@ class Form extends Component {
         const updatedApplicant = { ...this.state.applicant }
         updatedApplicant[e.target.name] = updatedField;
 
-        let formIsValid = true;
-        for (var fields in updatedApplicant) {
-            if (updatedApplicant.hasOwnProperty(fields) && fields !== 'id') {
-                formIsValid = updatedApplicant[fields].valid && formIsValid;
-            }
-        }
-        this.setState({ applicant: updatedApplicant, formIsValid: formIsValid });
+        // let formIsValid = true;
+        // for (var fields in updatedApplicant) {
+        //     if (updatedApplicant.hasOwnProperty(fields) && fields !== 'id') {
+        //         formIsValid = updatedApplicant[fields].valid && formIsValid;
+        //     }
+        // }
+        this.setState({ applicant: updatedApplicant });
     };
 
     //Check button state 
@@ -132,17 +132,32 @@ class Form extends Component {
 
     submit = (e) => {
         e.preventDefault();
-        if (this.state.formIsValid) {
+        const updatedApplicant = { ...this.state.applicant }
+        let formIsValid = true;
+        for (var fields in updatedApplicant) {
+            if (updatedApplicant.hasOwnProperty(fields) && fields !== 'id') {
+                formIsValid = updatedApplicant[fields].valid && formIsValid;
+            }
+        }
+        if (formIsValid) {
             this.props.submit(this.state.applicant);
-            this.setState({ errorSubmit: false });
+            this.setState({ applicant: updatedApplicant, errorSubmit: false });
         } else {
-            this.setState({ errorSubmit: true });
+            this.setState({ applicant: updatedApplicant, errorSubmit: true });
         }
     }
 
     saveEditedApplicantHandler = (e) => {
         e.preventDefault();
-        if (this.state.formIsValid) {
+        const updatedApplicant = { ...this.state.applicant }
+        let formIsValid = true;
+        for (var fields in updatedApplicant) {
+            if (updatedApplicant.hasOwnProperty(fields) && fields !== 'id') {
+                formIsValid = (updatedApplicant[fields].valid && formIsValid) || (!updatedApplicant[fields].touched && formIsValid);
+            }
+        }
+
+        if (formIsValid) {
             let appState = this.state.applicant;
             this.props.save(appState)
             this.setState({ errorSubmit: false });
@@ -195,7 +210,7 @@ class Form extends Component {
                             name="phoneNum"
                             placeholder="Enter Phone 08..."
                             value={this.state.applicant.phoneNum.value} />
-                        <p className="PrefCom">Preferred Way of Communication *</p>
+                        <p className={(!this.state.applicant.prefWayOfComm.valid && !this.state.applicant.prefWayOfComm.touched) || this.state.applicant.prefWayOfComm.valid ? 'Valid' : 'Invalid'}>Preferred Way of Communication *</p>
                         <div className="EmailRadio">
                             <label>
                                 <input
