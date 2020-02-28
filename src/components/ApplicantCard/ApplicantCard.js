@@ -136,7 +136,7 @@ class ApplicantCard extends Component {
                             </tr>
                             <tr className="StudentCart__wrapper-body-row" >
                                 <td className="Student-info-title">Study from home:</td>
-                                <td className="StudyFromHomeCart" name="studyFromHomeCart">{this.state.applicant.studyFromHome.value ? 'Yes' : null}</td>
+                                <td className="StudyFromHomeCart" name="studyFromHomeCart">{this.state.applicant.studyFromHome.value ? 'Yes' : 'No'}</td>
                             </tr>
                         </tbody>
                     </table>

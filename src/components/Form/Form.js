@@ -334,7 +334,7 @@ class Form extends Component {
                                 type="checkbox"
                                 name="studyFromHome"
                                 value="Study from home"
-                                checked={this.state.applicant.studyFromHome.value === 'Yes' ? true : null} />Study from home
+                                checked={this.state.applicant.studyFromHome.value ? true : null} />Study from home
                               <span className="Opt">
                                 (optional)</span>
                         </label>
